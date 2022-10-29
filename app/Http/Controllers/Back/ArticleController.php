@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -15,6 +16,12 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $data['categories'] = Category::all();
+        View::share($data);
+    }
     public function index()
     {
         $data['articles'] = Article::orderBy('created_at', 'ASC')->get();
@@ -42,8 +49,8 @@ class ArticleController extends Controller
     {
         $request->validate([
             'title'=>'required|min:3',
-            'editordata'=>'required|image|mim:jpg,jpeg,png',
-            'image'=>'required',
+            'editordata'=>'required',
+            'image'=>'required|image:jpg,jpeg,png',
             'category'=>'required',
         ]);
         $article = new Article();
@@ -62,7 +69,7 @@ class ArticleController extends Controller
             $article->image = $image_name;
         }
         $article->save();
-        return redirect()->back()->with('success',"process finished successfuly!");
+        return redirect()->route('blogs')->with('success',"process finished successfuly!");
     }
 
     /**
@@ -84,7 +91,9 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['category']=Category::FindOrFail($id);
+        $data['article']=Article::FindOrFail($id);
+        return view("back.articles.edit",$data);
     }
 
     /**
@@ -96,7 +105,29 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title'=>'required|min:3',
+            'editordata'=>'required',
+            'image'=>'image:jpg,jpeg,png',
+            'category'=>'required',
+        ]);
+        $article = Article::find($id);
+        $article->title = $request->title;
+        $article->content = $request->editordata;
+        $article->slug = Str::slug($request->slug);
+        $article->title = $request->title;
+        $article->category_id = $request->category;
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $image_name = $request->file('image')->getClientOriginalExtension();
+            $directory = "uploads/articles/";
+            $image_name = $request->title . rand(1, 10) . "." . $image_name;
+            $image->move($directory, $image_name);
+            $image_name = $directory . $image_name;
+            $article->image = $image_name;
+        }
+        $article->save();
+        return redirect()->route('blogs')->with('success',"process finished successfuly!");
     }
 
     /**

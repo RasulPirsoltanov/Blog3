@@ -45,16 +45,14 @@
                             <td>{{ $item->title }}</td>
                             <td>{{ $item->getcategory->name }}</td>
                             <td>{{ $item->slug }}</td>
-                            <td>{{ Str::limit($item->content , 50) }}</td>
-                            <td>{!! $item->status == 0
-                                ? "<span class='badge badge-danger'>Passive</span>"
-                                : "<span class='badge badge-danger'>Active</span>" !!}</td>
+                            <td>{{ Str::limit($item->content, 50) }}</td>
+                            <td><input type="checkbox" checked data-toggle="toggle"></td>
                             <td>{{ $item->hit }}</td>
                             <td>{{ $item->created_at }}</td>
                             <td>{{ $item->updated_at }}</td>
-                            <td><a href="" class="btn btn-danger">Delete</a>
-                                <a href="" class="btn btn-success">View</a>
-                                <a href="" class="btn btn-info">Edit</a>
+                            <td><a href="{{ route('blog.edit', $item->id) }}" class="btn btn-danger">Delete</a>
+                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-success">View</a>
+                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-info">Edit</a>
                             </td>
 
                         </tr>
@@ -71,4 +69,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('back') }}/js/demo/datatables-demo.js"></script>
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 @endsection

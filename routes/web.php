@@ -31,6 +31,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/blogs','index')->name('blogs');
         Route::get('/blogs/create','create')->name('create_blog');
         Route::post('/blogs/store','store')->name('store_blog');
+        Route::get('/blogs/{id}/edit','edit')->name('blog.edit');
+        Route::post('/blogs/{id}','update')->name('blog.update');
     });
 });
 
