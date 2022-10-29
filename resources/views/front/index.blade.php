@@ -14,7 +14,6 @@
                         <a href="{{ route('single', [$item->getcategory->slug, $item->slug]) }}">
                             <h2 class="post-title">{{ $item->title }}</h2>
                             <img src="{{ $item->image }}" width="350px" alt="fdfd">
-                            <h3 class="post-subtitle">{!! Str::limit($item->content, 50) !!}</h3>
                         </a>
                         <p class="post-meta">
                             Posted by
