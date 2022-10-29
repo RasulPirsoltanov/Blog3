@@ -42,7 +42,7 @@ class ArticleController extends Controller
     {
         $request->validate([
             'title'=>'required|min:3',
-            'editordata'=>'required|image',
+            'editordata'=>'required|image|mim:jpg,jpeg,png',
             'image'=>'required',
             'category'=>'required',
         ]);
