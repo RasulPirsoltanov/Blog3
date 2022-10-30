@@ -9,7 +9,8 @@
 @section('content')
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <table id="example" class="table table-striped" style="width:100%">
                 <thead>
                     <tr>
                         <th>image</th>
@@ -24,6 +25,29 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
+                <tbody>
+                    @foreach ($articles as $item)
+                        <tr>
+                            <td><img src="{{ asset($item->image) }}" width="70px" alt=""></td>
+                            <td>{{ $item->title }}</td>
+                            <td>{{ $item->getcategory->name }}</td>
+                            <td>{{ $item->slug }}</td>
+                            <td>{{ Str::limit($item->content, 50) }}</td>
+                            <td><input class="switch" data-status="{{$item->status}}" article-id="{{ $item->id }}" type="checkbox" data-toggle="toggle"
+                                    data-on="Aktive" data-off="Passive" data-onstyle="primary" data-offstyle="danger"
+                                    @if ($item->status === 1) checked @endif>
+                            </td>
+                            <td>{{ $item->hit }}</td>
+                            <td>{{ $item->created_at }}</td>
+                            <td>{{ $item->updated_at }}</td>
+                            <td><a href="{{ route('blog.edit', $item->id) }}" class="btn btn-danger">Delete</a>
+                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-success">View</a>
+                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-info">Edit</a>
+                            </td>
+
+                        </tr>
+                    @endforeach
+                </tbody>
                 <tfoot>
                     <tr>
                         <th>image</th>
@@ -38,26 +62,6 @@
                         <th>Actions</th>
                     </tr>
                 </tfoot>
-                <tbody>
-                    @foreach ($articles as $item)
-                        <tr>
-                            <td><img src="{{ asset($item->image) }}" width="70px" alt=""></td>
-                            <td>{{ $item->title }}</td>
-                            <td>{{ $item->getcategory->name }}</td>
-                            <td>{{ $item->slug }}</td>
-                            <td>{{ Str::limit($item->content, 50) }}</td>
-                            <td><input type="checkbox" checked data-toggle="toggle"></td>
-                            <td>{{ $item->hit }}</td>
-                            <td>{{ $item->created_at }}</td>
-                            <td>{{ $item->updated_at }}</td>
-                            <td><a href="{{ route('blog.edit', $item->id) }}" class="btn btn-danger">Delete</a>
-                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-success">View</a>
-                                <a href="{{ route('blog.edit', $item->id) }}" class="btn btn-info">Edit</a>
-                            </td>
-
-                        </tr>
-                    @endforeach
-                </tbody>
             </table>
         </div>
     </div>
@@ -72,4 +76,19 @@
 
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
+    </script>
+    <script>
+        $(function() {
+            $('.switch').change(function() {
+                id=$(this)[0].getAttribute('article-id');
+                $.get('{{route('blog.switch')}}',{id:id} ,function(data) {
+                    console.log(data);
+                });
+            })
+        })
+    </script>
 @endsection

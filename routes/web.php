@@ -33,6 +33,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/blogs/store','store')->name('store_blog');
         Route::get('/blogs/{id}/edit','edit')->name('blog.edit');
         Route::post('/blogs/{id}','update')->name('blog.update');
+        Route::get('/blogs/switch','switch')->name('blog.switch');
     });
 });
 

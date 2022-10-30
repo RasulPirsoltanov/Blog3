@@ -129,7 +129,18 @@ class ArticleController extends Controller
         $article->save();
         return redirect()->route('blogs')->with('success',"process finished successfuly!");
     }
-
+     
+    public function switch(Request $request){
+        $article=Article::find($request->id);
+        if($article->status==1){
+            $article->status=0;
+        }
+        else{
+            $article->status=1;
+        }
+        $article->save();
+        return $request->id;
+    }
     /**
      * Remove the specified resource from storage.
      *
